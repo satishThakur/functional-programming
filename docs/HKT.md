@@ -34,4 +34,4 @@ Here `Mapper[List]` would be a type. Now we can write a generic and polymorphic 
 def doubleNums[F[_]](nums: F[Int], mapper : Mapper[F]): F[Int] = mapper.map(nums)(_ * 2)
 ```
 The `doubleNums` works with any type constructor which has a corresponding Mapper defined. The API looks weird, but we will clean it uo when we reach "Type Classes". 
-The code for this section is [here]("https://github.com/satishThakur/functional-programming/blob/main/src/main/scala/com/satish/fp/basics/HKT.scala")
+The code for this section is [here](https://github.com/satishThakur/functional-programming/blob/main/src/main/scala/com/satish/fp/basics/HKT.scala)
