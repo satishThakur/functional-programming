@@ -11,7 +11,7 @@ As this repository and code would be in Scala working knowledge of Scala is assu
 ### Core Concepts
 * [Contextual Abstraction]
 * [Higher Kinded Types](https://github.com/satishThakur/functional-programming/blob/main/docs/HKT.md)
-* [Type Classes]
+* [Type Classes](https://github.com/satishThakur/functional-programming/blob/main/docs/TypeClasses.md)
 
 ### Cats
 
