@@ -14,12 +14,26 @@ As this repository and code would be in Scala working knowledge of Scala is assu
 * [Type Classes](https://github.com/satishThakur/functional-programming/blob/main/docs/TypeClasses.md)
 
 ### Cats
+Important TypeClasses:
+* [Monoid]
+* [Functor]
+* [Monad]
+* [Applicative]
+* [Traverse]
+* [MonadError & ApplicativeError]
 
 ### Cats-effect
+* [IO Monad]
+* [Resource]
+* [Supervisor]
+* [Fiber]
+* [Ref and Defer]
+* [TypeClasses]
 
+### Sample Application
+#### REST API Based Micro Service
 
 ### References
 #### Books
 * Functional Programming in Scala
-* 
 
