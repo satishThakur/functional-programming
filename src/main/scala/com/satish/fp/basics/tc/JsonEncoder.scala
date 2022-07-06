@@ -21,7 +21,7 @@ inline def elemLabels[T <: Tuple] : List[String] = inline erasedValue[T] match
   case _: (t *: ts) => constValue[t].asInstanceOf[String] :: elemLabels[ts]
 
 
-inline def summonAll[A <: Tuple]: List[JsonEncoder[_]] = inline erasedValue[A] match
+inline def summonAll[A <: Tuple]: List[JsonEncoder[?]] = inline erasedValue[A] match
   case _: EmptyTuple => Nil
   case _: (t *: ts) => summonInline[JsonEncoder[t]] :: summonAll[ts]
 
