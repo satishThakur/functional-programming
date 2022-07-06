@@ -20,7 +20,7 @@ Important TypeClasses:
 * [Monad]
 * [Applicative]
 * [Traverse]
-* [MonadError & ApplicativeError]
+* [MonadError & ApplicativeError](https://github.com/satishThakur/functional-programming/blob/main/docs/cats/MonadError.md)
 
 ### Cats-effect
 * [IO Monad]
