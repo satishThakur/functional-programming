@@ -12,6 +12,7 @@ As this repository and code would be in Scala working knowledge of Scala is assu
 * [Contextual Abstraction]
 * [Higher Kinded Types](https://github.com/satishThakur/functional-programming/blob/main/docs/HKT.md)
 * [Type Classes](https://github.com/satishThakur/functional-programming/blob/main/docs/TypeClasses.md)
+* [Tagless Final](https://github.com/satishThakur/functional-programming/blob/main/docs/tagless-encoding/notes.md)
 
 ### Cats
 Important TypeClasses:
