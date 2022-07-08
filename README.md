@@ -21,6 +21,8 @@ Important TypeClasses:
 * [Applicative]
 * [Traverse]
 * [MonadError & ApplicativeError](https://github.com/satishThakur/functional-programming/blob/main/docs/cats/MonadError.md)
+* [MonadTransformer]
+* [Kleisli]
 
 ### Cats-effect
 * [IO Monad]
@@ -36,4 +38,8 @@ Important TypeClasses:
 ### References
 #### Books
 * Functional Programming in Scala
+
+#### Other Resources
+* [Monad](https://kubuszok.com/2018/different-ways-to-understand-a-monad/#monad)
+* [Functional Error Handling](https://guillaumebogard.dev/posts/functional-error-handling/)
 
