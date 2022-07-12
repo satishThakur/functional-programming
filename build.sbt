@@ -14,6 +14,7 @@ lazy val root = project
     libraryDependencies ++= Seq(
       Libraries.cats,
       Libraries.catsEffect,
+      Libraries.catsRedis,
     ),
     libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test
   )
