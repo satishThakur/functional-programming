@@ -15,6 +15,7 @@ lazy val root = project
       Libraries.cats,
       Libraries.catsEffect,
       Libraries.catsRedis,
+      Libraries.catsRedisLog,
     ),
     libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test
   )
