@@ -26,11 +26,8 @@ object DemoApp extends IOApp:
     val stringCommand: Resource[IO, StringCommands[IO, String, Int]] =
       redisClient.flatMap(Redis[IO].fromClient(_, newCodec))
 
-    stringCommand.use{
-      redisCommand =>
-        val items = Items.make[IO]
-        val counter = Counter.make[IO]("item-counter", redisCommand)
-        val itemCouner = new ItemCounters(items, counter)
-        application(itemCouner, counter, 10)
-
-      }.flatMap(i => IO.println(s"Counter - $i")).as(ExitCode.Success)
+    val items = Items.make[IO]
+    val counter = Counter.make[IO]("item-counter", stringCommand)
+    val itemCouner = new ItemCounters(items, counter)
+    application(itemCouner, counter, 10)
+      .flatMap(i => IO.println(s"Counter - $i")).as(ExitCode.Success)
