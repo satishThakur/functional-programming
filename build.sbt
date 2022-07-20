@@ -9,6 +9,7 @@ lazy val root = project
     version := "0.1.0-SNAPSHOT",
 
     scalaVersion := scala3Version,
+    resolvers += Resolver.sonatypeRepo("snapshots"),
     scalacOptions ++= List("-feature", "-deprecation", "-Ykind-projector:underscores", "-source:future"),
 
     libraryDependencies ++= Seq(
@@ -16,6 +17,9 @@ lazy val root = project
       Libraries.catsEffect,
       Libraries.catsRedis,
       Libraries.catsRedisLog,
+      Libraries.httpsDsl,
+      Libraries.httpsServer,
+      Libraries.httpsClient,
     ),
     libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test
   )
