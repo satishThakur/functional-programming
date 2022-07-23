@@ -20,6 +20,7 @@ lazy val root = project
       Libraries.httpsDsl,
       Libraries.httpsServer,
       Libraries.httpsClient,
+      Libraries.httpsCirce,
       Libraries.circeCore,
       Libraries.circeParser,
       Libraries.circeExtras,

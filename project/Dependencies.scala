@@ -20,6 +20,7 @@ object Dependencies {
     val httpsDsl     = "org.http4s"     %% "http4s-dsl"          % V.http4sVersion
     val httpsServer  = "org.http4s"     %% "http4s-ember-server" % V.http4sVersion
     val httpsClient  = "org.http4s"     %% "http4s-ember-client" % V.http4sVersion
+    val httpsCirce   = "org.http4s"     %% "http4s-circe"        % V.http4sVersion
 
     val circeCore    = "io.circe"       %% "circe-core"          % V.circe
     val circeParser  = "io.circe"       %% "circe-parser"        % V.circe
