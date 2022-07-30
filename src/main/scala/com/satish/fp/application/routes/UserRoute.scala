@@ -8,11 +8,13 @@ import cats.syntax.all.*
 import org.http4s.server.Router
 
 import com.satish.fp.application.routes.auth.BasicAuth
-
+import cats.Monad
+import cats.syntax.all.*
 
 import com.satish.fp.application.domain.User
+import com.satish.fp.application.services.Users
 
-object UserRoute:
+class UserRoute(userService: Users[IO]):
 
   val prefix = "rest"
 
@@ -31,8 +33,8 @@ object UserRoute:
 
   val routes = Router(
     prefix -> route,
-    prefix -> BasicAuth.middleware[IO](another),
-    prefix -> BasicAuth.middleware[IO](auth)
+    prefix -> BasicAuth.authMiddleware[IO](userService)(another),
+    prefix -> BasicAuth.authMiddleware[IO](userService)(auth)
   )
 
 
