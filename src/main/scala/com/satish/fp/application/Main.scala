@@ -9,24 +9,21 @@ import cats.effect.{ExitCode, IO, IOApp}
 import com.satish.fp.application.domain.Goal
 import org.http4s.circe.CirceEntityCodec.*
 import cats.syntax.all.*
-import com.satish.fp.application.program.Goals
+import com.satish.fp.application.services.Goals
+import org.http4s.server
+
+import com.satish.fp.application.routes.UserRoute
 
 object Main extends IOApp:
 
   val goals = Goals.make[IO]
-
-  val helloService = HttpRoutes.of[IO]{
-    case GET -> Root / "hello" / name =>
-      Ok(s"Hello, $name.")
-  }
 
   val goalService = HttpRoutes.of[IO]{
     case GET -> Root / "goals" =>
       Ok(goals.getAll)
   }
 
-  val router = (helloService <+> goalService).orNotFound
-
+  val router = (goalService <+> UserRoute.routes).orNotFound
 
   override def run(args: List[String]): IO[ExitCode] =
     EmberServerBuilder

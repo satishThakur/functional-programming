@@ -1,4 +1,4 @@
-package com.satish.fp.application.program
+package com.satish.fp.application.services
 import com.satish.fp.application.domain.Goal
 import cats.Applicative
 import cats.syntax.applicative.*
