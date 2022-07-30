@@ -21,7 +21,6 @@ import org.typelevel.ci.CIString
 case class BasicAuthCreds(username : String, password: String)
 
 object Authenticator:
-
   //"Basic abcdef"
   def parseCreds(headerValue : String) : Option[BasicAuthCreds] =
     println(s"got header to parse - $headerValue")
@@ -42,11 +41,10 @@ object Authenticator:
 
 object BasicAuth:
 
-
   def authMiddleware[F[_]: Monad](userService : Users[F]): AuthMiddleware[F, User] =
-    basicAuthMiddleware(realAuthUser(userService))
+    authMiddleware(authUser(userService))
 
-  def basicAuthMiddleware[F[_]: Monad, U](userAuth: Kleisli[OptionT[F, _], Request[F], U]): AuthMiddleware[F, U] =
+  def authMiddleware[F[_]: Monad, U](userAuth: Kleisli[OptionT[F, _], Request[F], U]): AuthMiddleware[F, U] =
     service => Kleisli{
       req =>
         val resp = userAuth(req).value.flatMap{
@@ -56,14 +54,7 @@ object BasicAuth:
         OptionT.liftF(resp)
     }
 
-  def middleware[F[_] : Monad]: AuthMiddleware[F, User] = AuthMiddleware(authUser)
-
-  def authUser[F[_] : Applicative]: Kleisli[OptionT[F, _], Request[F], User] = Kleisli{
-      case GET -> Root / "unauth" / "welcome" => OptionT.liftF(User("dummy", "secret").pure[F])
-      case _ => OptionT.none
-  }
-
-  def realAuthUser[F[_] : Monad](userService : Users[F]) : Kleisli[OptionT[F, _], Request[F], User] = Kleisli{
+  def authUser[F[_] : Monad](userService : Users[F]) : Kleisli[OptionT[F, _], Request[F], User] = Kleisli{
     req => {
       println("in realAuthUser...")
       val headerValue = authHeaderValue(req)
