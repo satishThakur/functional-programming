@@ -60,8 +60,13 @@ object BasicAuth:
     middleware(authUser(userService))
 
   def middleware[F[_]: Monad, U](userAuth: Kleisli[OptionT[F, _], Request[F], U]): AuthMiddleware[F, U] =
-    _.compose(Kleisli((r : Request[F]) => userAuth(r).map(AuthedRequest(_, r))))
-
+    service => Kleisli{
+      req =>
+        OptionT(userAuth(req).value.flatMap{
+          case Some(a) => service(AuthedRequest(a, req)).value
+          case None => Some(challengeResp).pure[F]
+        })
+    }
 
   def authUser[F[_] : Monad](userService : Users[F]) : Kleisli[OptionT[F, _], Request[F], User] = Kleisli{
     req => {
@@ -71,7 +76,7 @@ object BasicAuth:
       liftedCreds.flatMap(bc => OptionT(userService.getUser(bc.username)))
     }
   }
-  
+
   def authHeaderValue[F[_]](req : Request[F]) : Option[String] =
     req.headers.get(CIString("Authorization")).map{
       ls => ls.head.value
