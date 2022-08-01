@@ -6,7 +6,7 @@ import org.http4s.implicits.*
 import cats.effect.IO
 import cats.syntax.all.*
 import org.http4s.server.Router
-import com.satish.fp.application.routes.auth.BasicAuth
+import com.satish.fp.application.routes.middleware.BasicAuth
 import cats.Monad
 import cats.syntax.all.*
 import com.satish.fp.application.domain.User
@@ -32,8 +32,8 @@ class UserRoute[F[_] : Monad](userService: Users[F]) extends Http4sDsl[F]:
 
   val routes: HttpRoutes[F] = Router(
     prefix + "/hello" -> route,
-    prefix + "/unauth" -> BasicAuth.authMiddleware[F](userService)(another),
-    prefix -> BasicAuth.authMiddleware[F](userService)(auth)
+    prefix + "/unauth" -> BasicAuth.middleware[F](userService)(another),
+    prefix -> BasicAuth.middleware[F](userService)(auth)
   )
 
 
