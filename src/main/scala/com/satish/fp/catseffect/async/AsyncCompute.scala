@@ -27,5 +27,6 @@ object AsyncCompute extends IOApp :
   override def run(args: List[String]): IO[ExitCode] =
     for {
       v <- asyncCompute
+      _ <- IO.println(s"Now in ${Thread.currentThread().getName}")
       _ <- IO.println(v)
     } yield ExitCode.Success
