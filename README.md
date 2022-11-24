@@ -44,3 +44,8 @@ Important TypeClasses:
 * [Monad](https://kubuszok.com/2018/different-ways-to-understand-a-monad/#monad)
 * [Functional Error Handling](https://guillaumebogard.dev/posts/functional-error-handling/)
 
+todo add lambda calculus
+C
+C
+todo - add l
+
