@@ -35,3 +35,7 @@ def doubleNums[F[_]](nums: F[Int], mapper : Mapper[F]): F[Int] = mapper.map(nums
 ```
 The `doubleNums` works with any type constructor which has a corresponding Mapper defined. The API looks weird, but we will clean it uo when we reach "Type Classes". 
 The code for this section is [here](https://github.com/satishThakur/functional-programming/blob/main/src/main/scala/com/satish/fp/basics/HKT.scala)
+
+### References
+* https://typelevel.org/blog/2016/08/21/hkts-moving-forward.html
+* 

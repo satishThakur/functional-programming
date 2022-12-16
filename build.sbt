@@ -25,10 +25,6 @@ lazy val root = project
       Libraries.circeParser,
       Libraries.circeExtras,
       Libraries.circeRefined,
-
-      Libraries.fs2Core,
-      Libraries.fs2IO,
-      Libraries.fs2Scodec,
     ),
     libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test
   )

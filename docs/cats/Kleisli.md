@@ -21,7 +21,7 @@ What can we do with Kleisli depends upon properties of `F`. For example:
 ### TypeClass Instances
 Similarly depending upon `F` we would automatically have typeclass instances for Kleisli. For example if we have `Monad[F]` then we would have `Monad[Kleisli[F[_]]]` available. 
 Please note that as for any other function here we would keep both `F` and input `A` constant and let the output be free. For exmaple:
-`type MyKleisli[F[], A] = Kleisli[F,A,_]`
+`type MyKleisli[F[_], A] = Kleisli[F,A,_]`
 
 ### Monad Transformer
 As we know that Monad Transformers help us composing nested Monads. For example `EitherT[F, E, A]` would let us compose `F[Either]` for any `F` which is a Monad. 

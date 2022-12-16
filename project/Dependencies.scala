@@ -9,6 +9,7 @@ object Dependencies {
     val http4sVersion    = "1.0.0-M34"
     val circe            = "0.14.1"
     val fs2              = "3.2.11"
+    val skunk            = "0.3.1"
   }
 
   object Libraries {
@@ -33,6 +34,8 @@ object Dependencies {
     val fs2IO        = "co.fs2"         %% "fs2-io"               % V.fs2
     val fs2Rs        = "co.fs2"         %% "fs2-reactive-streams" % V.fs2
     val fs2Scodec    = "co.fs2"         %% "fs2-scodec"           % V.fs2
+
+    val skunkCore    = "org.tpolecat"   %% "skunk-core"           % V.skunk
   }
 }
 
