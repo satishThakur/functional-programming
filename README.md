@@ -1,5 +1,5 @@
 ## Functional Programming in Scala
-* [Introduction] (https://github.com/satishThakur/functional-programming/blob/main/docs/basics/intro.md)
+* [Introduction](https://github.com/satishThakur/functional-programming/blob/main/docs/basics/intro.md)
 
 ### Objectives
 This repository contains Functional Programming notes/learning and code examples in my journey to learn functional programming. We would use [typelevel](https://typelevel.org/) ecosystem specifically:
