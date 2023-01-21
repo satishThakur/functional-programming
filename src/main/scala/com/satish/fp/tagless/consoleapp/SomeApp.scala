@@ -2,11 +2,11 @@ package com.satish.fp.tagless.consoleapp
 import cats.Monad
 import cats.syntax.all.*
 import cats.effect.{IO, IOApp}
-import com.satish.fp.tagless.consoleapp.Console.liveConsole
+import com.satish.fp.tagless.consoleapp.Console.LiveConsole
 
 
 object SomeApp extends IOApp.Simple {
-  def run: IO[Unit] =  Application.someFunc[IO](liveConsole)
+  def run: IO[Unit] =  Application.someFunc[IO](new LiveConsole[IO])
 }
 
 object Application:

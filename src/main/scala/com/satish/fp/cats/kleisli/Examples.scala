@@ -9,6 +9,8 @@ object Examples extends App:
 
     //we can not compose these functions ...
 
+    def c : Int => Option[List[String]] = i => f(i).flatMap(g) //explicit using flatMap
+
     val h = Kleisli(f).andThen(Kleisli(g))
 
     val result : Option[List[String]] = h.run(1)

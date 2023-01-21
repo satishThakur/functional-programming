@@ -15,6 +15,7 @@ import scala.concurrent.duration.*
  */
 case class MyEitherT[F[_] : Monad, E, A](value : F[Either[E,A]]):
   def unit[A](a: A) : MyEitherT[F,E,A] = MyEitherT(Right(a).pure[F])
+  
   def flatMap[B](f: A => MyEitherT[F,E,B]) : MyEitherT[F,E,B] =
     MyEitherT(value.flatMap{
       case Left(e) => Left(e).pure[F]

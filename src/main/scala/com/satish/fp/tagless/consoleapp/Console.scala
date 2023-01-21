@@ -11,9 +11,6 @@ trait Console[F[_]]:
 
 
 object Console:
-
-  def liveConsole : Console[IO] = new LiveConsole[IO]
-
   class LiveConsole[F[_] : CatsConsole] extends Console[F]:
     def readLine: F[String] = CatsConsole[F].readLine
     def println(line: String): F[Unit] = CatsConsole[F].println(line)

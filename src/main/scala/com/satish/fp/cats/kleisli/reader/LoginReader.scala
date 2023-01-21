@@ -8,10 +8,10 @@ object LoginReader:
 
   type DbReader[A] = Reader[DB, A]
 
-  def findUsername(id: Int): DbReader[Option[String]] =
+  private def findUsername(id: Int): DbReader[Option[String]] =
     Reader(db => db.username.get(id))
 
-  def checkPassword(username: String, password: String): DbReader[Boolean] =
+  private def checkPassword(username: String, password: String): DbReader[Boolean] =
     Reader(db => db.password.get(username).contains(password) )
 
   def checkLogin(id: Int, password: String): DbReader[Boolean] =
@@ -29,12 +29,12 @@ object loginReaderMain extends App:
     2 -> "kate",
     3 -> "margo"
   )
-  val passwords = Map(
+  private val passwords = Map(
     "dade"  -> "zerocool",
     "kate"  -> "acidburn",
     "margo" -> "secret"
   )
-  val db = DB(users, passwords)
+  private val db = DB(users, passwords)
   println(checkLogin(1, "zerocool").run(db))
   println(checkLogin(4, "davinci").run(db))
 
