@@ -4,7 +4,7 @@ HTTP4S is built on top of Cats Effect and Cats. It is a pure functional library 
 HTTP4S uses FS2 for streaming and Cats effect for concurrency. This document would outline the high level 
 design of HTTP4S and how it can be used to build a functional HTTP server.
 
-### Core Constructs
+### Core Constructs - HttpRoutes and HttpApp
 A simple HTTP server can be thought of following function:
 ```scala
 Request => Response
@@ -33,3 +33,52 @@ A bit of modification to the types would lead us to:
 Kleisli[OptionT[F, _], Request[F], Response[F]]
 ```
 Which is a core construct in HTTP4S aliased `HttpRoutes[F]`.
+
+#### HttpApp
+HttpApp is a type alias for `Kleisli[F[_], Request[F], Response[F]]` - which is a function that takes a request and returns a response effectfully.
+This differs from `HttpRoutes` in that it is a total function, and therefore has no way to represent an empty response.
+
+#### AuthedRoutes
+AuthedRoutes is a type alias for `Kleisli[OptionT[F, _], AuthedRequest[F, T], Response[F]]` - which is a function that takes a request and returns a response effectfully.
+Here `AuthedRequest[F, T]` is a wrapper around `Request[F]` that adds an `AuthedRequest#context` of type `T`. This is useful for adding authentication information to the request.
+Think of it as a `Request` with some additional context. In most of the cases this additional context would be authentication information like user id, email, etc.
+
+#### Middlewares
+Middlewares are used to transform the request and response. For example, we can add a middleware to log the request and response.
+We can think of a middleware as a function that takes a service and returns a service. 
+```scala
+HttpRoutes[F] => HttpRoutes[F]
+```
+This translates to a Kleisli function:
+```scala
+Kleisli[OptionT[F, _], Request[F], Response[F]] => Kleisli[OptionT[F, _], Request[F], Response[F]]
+```
+The above is called `HttpMiddleware[F]`.
+This is how we would typically define a middleware:
+```scala
+def myMiddleware[F[_]](http: HttpRoutes[F]): HttpRoutes[F] = Kleisli { req =>
+  // do something with the request
+  http(req).map { resp =>
+    // do something with the response
+    resp
+  }
+}
+val myService: HttpRoutes[F] = myMiddleware()
+```
+#### AuthMiddleware
+AuthMiddleware is used for authentication. This middleware is responsible for extracting the authentication information from the request and adding it to the context of the request. 
+The type of `AuthMiddleware` is:
+```scala
+Kleisli[OptionT[F,_], AuthedRequest[F, T], Response[F]] => Kleisli[OptionT[F,_], Request[F], Response[F]]
+```
+Where `T` is the type of the context. This is how we would typically define an auth middleware:
+```scala
+def myAuthMiddleware[F[_], T](http: AuthedRoutes[T, F]): HttpRoutes[F] = service => Kleisli { req =>
+  // do something with the request
+  //find the context
+  val context = ???
+  http(AuthedRequest(req, context)).map { resp =>
+    // do something with the response
+    resp
+  }
+}
