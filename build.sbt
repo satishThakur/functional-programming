@@ -25,6 +25,7 @@ lazy val root = project
       Libraries.circeParser,
       Libraries.circeExtras,
       Libraries.circeRefined,
+      Libraries.jwtCore,
     ),
     libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test
   )

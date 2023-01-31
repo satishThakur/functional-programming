@@ -10,6 +10,7 @@ object Dependencies {
     val circe            = "0.14.1"
     val fs2              = "3.2.11"
     val skunk            = "0.3.1"
+    val jwtCore          = "9.1.2"
   }
 
   object Libraries {
@@ -36,6 +37,7 @@ object Dependencies {
     val fs2Scodec    = "co.fs2"         %% "fs2-scodec"           % V.fs2
 
     val skunkCore    = "org.tpolecat"   %% "skunk-core"           % V.skunk
+    val jwtCore      = "com.github.jwt-scala"    %% "jwt-core"           % V.jwtCore
   }
 }
 
