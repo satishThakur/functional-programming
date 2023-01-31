@@ -10,7 +10,7 @@ object AuthApp extends IOApp.Simple:
     val userId = UUID.randomUUID()
     println(userId)
     for{
-      token <- service.createToken(userId)
+      token <- service.createToken(UserClaim(userId))
       _ <- IO.println(token)
       id <- service.validateToken(token)
       _ <- IO.println(id)
