@@ -1,6 +1,6 @@
 package com.satish.fp.tokenauth
 
-import cats.Monad
+import cats.{Monad, MonadError, MonadThrow}
 import cats.effect.std.Console
 import cats.syntax.all.*
 
@@ -14,31 +14,33 @@ import scala.util.{Success, Try}
 import io.circe.syntax.*
 import io.circe.parser.*
 
+import scala.util.control.NoStackTrace
+
+enum ValidationError:
+  case InvalidToken extends ValidationError
+  case ExpiredToken extends ValidationError
+
+case class ValidationException(reason: ValidationError) extends NoStackTrace
+
 trait JwtAuthService[F[_]]:
   def createToken(userId: UUID): F[String]
-  def validateToken(token: String): F[Option[UUID]]
+  def validateToken(token: String): F[UUID]
 
 
-class JwtAuthServiceImpl[F[_] : JwtClock: Monad : Console] extends JwtAuthService[F]:
+class JwtAuthServiceImpl[F[_] : JwtClock: MonadThrow : Console] extends JwtAuthService[F]:
   override def createToken(userId: UUID): F[String] =
     val claim = generateClaim(userId)
     claim.map(c => Jwt.encode(c, "secretKey", JwtAlgorithm.HS512))
 
-  override def validateToken(token: String): F[Option[UUID]] =
-    val claim: Try[JwtClaim] = Jwt.decode(token, "secretKey", Seq(JwtAlgorithm.HS512))
-    claim match
+  override def validateToken(token: String): F[UUID] =
+    Jwt.decode(token, "secretKey", Seq(JwtAlgorithm.HS512)) match
       case Success(value) =>
         val uuid = decode[UUID](value.content.replace('{', '"').replace('}', '"'))
-        Console[F].println(value) *>
-          Console[F].println(value.content) *>
-          Console[F].println(uuid) *>
-          Monad[F].pure(Some(uuid.getOrElse(UUID.randomUUID())))
-      case _ => Monad[F].pure(None)
+        MonadThrow[F].fromEither(uuid.leftMap(_ => ValidationException(ValidationError.InvalidToken)))
+      case _ => ValidationException(ValidationError.InvalidToken).raiseError
 
   private def generateClaim(userId: UUID): F[JwtClaim] =
     for{
       n <- JwtClock[F].nowEpocSeconds
-      _ <- Console[F].println(userId)
-      _ <- Console[F].println(userId.asJson.noSpaces)
       exp <- JwtClock[F].futureEpocSeconds(FiniteDuration(1, TimeUnit.DAYS))
     } yield JwtClaim(content = userId.asJson.noSpaces).issuedAt(n).expiresAt(exp)
