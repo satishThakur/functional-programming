@@ -42,7 +42,7 @@ object Free:
     override def unit[A](a: => A): Free[F, A] = Return(a)
 
     extension[A] (fa: Free[F, A])
-      def flatMap[B](f: A => Free[F, B]): Free[F, B] = fa flatMap (f)
+      def flatMap[B](f: A => Free[F, B]): Free[F, B] = fa.flatMap(f)
 
   extension[A] (fa: Free[Function0, A])
     @annotation.tailrec

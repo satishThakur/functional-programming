@@ -51,7 +51,7 @@ class LiveCategories[F[_]: MonadThrow: Random] extends Categories[F]:
 
 class EitherProgram[F[_] : Functor](categories: Categories[F]):
   def findAll : F[List[Category]] = categories.maybeFindAll.map{
-    case Left(RandomError) => List.empty
+    case Left(_) => List.empty
     case Right(v) => v
   }
 
