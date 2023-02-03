@@ -38,13 +38,20 @@ case class AsymmetricKeyPair(privateKey: String, publicKey: String)
 
 trait Claim[F[_], User]:
   def createClaim(user: User): F[JwtClaim]
+  def extractUser(claim: JwtClaim): F[User]
 
 object Claim:
+  def apply[F[_], User](using claim: Claim[F, User]): Claim[F, User] = claim
   def makeClaim[F[_]: JwtClock: MonadThrow, User: Encoder : Decoder]: Claim[F, User] =
-    (user: User) => for {
-      n <- JwtClock[F].nowEpocSeconds
-      exp <- JwtClock[F].futureEpocSeconds(FiniteDuration(1, TimeUnit.DAYS))
-    } yield JwtClaim(user.asJson.noSpaces).issuedAt(n).expiresAt(exp)
+    new Claim[F, User]:
+      override def extractUser(claim: JwtClaim): F[User] =
+        val user = decode[User](claim.content)
+        MonadThrow[F].fromEither(user.leftMap(_ => ValidationException(ValidationError.InvalidToken)))
+
+      override def createClaim(user: User): F[JwtClaim] = for {
+        n <- JwtClock[F].nowEpocSeconds
+        exp <- JwtClock[F].futureEpocSeconds(FiniteDuration(1, TimeUnit.DAYS))
+      } yield JwtClaim(user.asJson.noSpaces).issuedAt(n).expiresAt(exp)
 
 trait Token[F[_], User]:
 
@@ -53,32 +60,30 @@ trait Token[F[_], User]:
     def verify(token: String): F[User]
 
 object Token:
-  def makeSymToken[F[_]: MonadThrow,User: Encoder : Decoder]
-  (claim: Claim[F, User],secret: SecretKey): Token[F, User] =
+  def makeSymToken[F[_]: MonadThrow, User: Encoder : Decoder]
+  (secret: SecretKey)(using Cl : Claim[F, User]): Token[F, User] =
     new Token[F, User]:
       override def create(user: User): F[String] =
-        val c = claim.createClaim(user)
+        val c = Cl.createClaim(user)
         c.map(c => Jwt.encode(c, secret.value, JwtAlgorithm.HS512))
 
       override def verify(token: String): F[User] =
         Jwt.decode(token, secret.value, Seq(JwtAlgorithm.HS512)) match
           case Success(value) =>
-            val uuid = decode[User](value.content)
-            MonadThrow[F].fromEither(uuid.leftMap(_ => ValidationException(ValidationError.InvalidToken)))
+            Cl.extractUser(value)
           case _ => ValidationException(ValidationError.InvalidToken).raiseError
 
   def makeAsymToken[F[_]: MonadThrow, User: Encoder : Decoder]
-  (claim: Claim[F, User], keyPair: AsymmetricKeyPair): Token[F, User] =
+  (keyPair: AsymmetricKeyPair)(using Cl: Claim[F, User]): Token[F, User] =
     new Token[F, User]:
       override def create(user: User): F[String] =
-        val c = claim.createClaim(user)
+        val c = Cl.createClaim(user)
         c.map(c => Jwt.encode(c, keyPair.privateKey, JwtAlgorithm.RS256))
 
       override def verify(token: String): F[User] =
         Jwt.decode(token, keyPair.publicKey, Seq(JwtAlgorithm.RS256)) match
           case Success(value) =>
-            val uuid = decode[User](value.content)
-            MonadThrow[F].fromEither(uuid.leftMap(_ => ValidationException(ValidationError.InvalidToken)))
+            Cl.extractUser(value)
           case _ => ValidationException(ValidationError.InvalidToken).raiseError
 
 end Token
