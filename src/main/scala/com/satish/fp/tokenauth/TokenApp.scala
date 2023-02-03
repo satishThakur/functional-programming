@@ -5,7 +5,7 @@ import cats.syntax.all.*
 
 object TokenApp extends IOApp.Simple:
   override def run: IO[Unit] =
-    implicit val claim: Claim[IO,UserClaim] = Claim.makeClaim[IO,UserClaim]
+    given claim: Claim[IO,UserClaim] = Claim.makeClaim[IO,UserClaim]
     val token = Token.makeSymToken[IO,UserClaim](SecretKey("superSecret"))
     val user = UserClaim(UUID.randomUUID())
     val anotherUser = UserClaim(UUID.randomUUID())
