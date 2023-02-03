@@ -29,7 +29,3 @@ object TokenApp extends IOApp.Simple:
     } yield ()
 
     y.flatMap(_ => x)
-
-
-
-  //x.flatMap(_ => y)
