@@ -42,7 +42,9 @@ trait Claim[F[_], User]:
 
 object Claim:
   def apply[F[_], User](using claim: Claim[F, User]): Claim[F, User] = claim
-  def makeClaim[F[_]: JwtClock: MonadThrow, User: Encoder : Decoder]: Claim[F, User] =
+
+  given [F[_]: JwtClock: MonadThrow, User: Encoder : Decoder]: Claim[F, User] = makeClaim
+  private def makeClaim[F[_]: JwtClock: MonadThrow, User: Encoder : Decoder]: Claim[F, User] =
     new Claim[F, User]:
       override def extractUser(claim: JwtClaim): F[User] =
         val user = decode[User](claim.content)
