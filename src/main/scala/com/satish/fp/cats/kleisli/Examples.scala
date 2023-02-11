@@ -1,5 +1,5 @@
 package com.satish.fp.cats.kleisli
-import cats.data.Kleisli
+import cats.data.{Kleisli, OptionT}
 
 object Examples extends App:
 
@@ -15,5 +15,16 @@ object Examples extends App:
 
     val result : Option[List[String]] = h.run(1)
     println(result)
+
+    type sometype[F[_], A, B] = Kleisli[F, A, B]
+
+    type another = sometype[Option, Int, List[String]]
+
+    type yetanother = sometype[List, Int, List[String]]
+
+    type yetanother1 = sometype[[X] =>> List[Option[X]], Int, List[String]]
+    //type yetanother11 = sometype[List[Option[_]], Int, List[String]]
+
+    type yetanother2 = sometype[OptionT[List, _], Int, List[String]]
 
 

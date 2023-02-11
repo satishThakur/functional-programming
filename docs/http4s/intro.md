@@ -21,7 +21,7 @@ Request => F[Option[Response]]
 ```
 We would use `OptionT[F, Response]` to denote this.
 ```scala
-Request => OptionT[F, Response]
+Request => OptionT[F[_], Response]
 ```
 If we model the above function as a Kleisli, we would get:
 ```scala

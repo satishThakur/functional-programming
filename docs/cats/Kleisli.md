@@ -13,7 +13,7 @@ g : String => List[String]
 ```
 These functions compose and we can define `h = f compose g`. 
 
-Kleisli simply is a wrapper around `A => F[B]` defined as `Kleisli[F, A, B]`. 
+Kleisli simply is a wrapper around `A => F[B]` defined as `Kleisli[F[_], A, B]`. 
 What can we do with Kleisli depends upon properties of `F`. For example:
 * If we have implicit `Monad[F]` in scope then we can do operations like `flatMap`, `compose`.
 * If we have implicit `Functor[F]` in scope we can map over Kleisli. 
