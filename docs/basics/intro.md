@@ -3,7 +3,7 @@
 ### Complexity Management
 Bulk of our time is spent in managing Complexity of the Systems. If we have to summarize what we are tying to solve:
 How do we build systems which functions correctly and keep on doing so when modified.
-As we add more code/features to the system if the complexity increases linearly the speed of execution as well as operatiblity would soon become challenge. We do want to create a system which is complex in terms of features and functionalies but not in terms of Code. The code should be simple, modular, easy to reason about and extend.
+As we add more code/features to the system, if the complexity increases linearly - the speed of execution as well as operatiblity would soon become challenge. We do want to create a system which is complex in terms of features and functionalies but not in terms of Code. The code should be simple, modular, easy to reason about and extend.
 
 ### Fearless Refactoring
 As we add more code/features to a system ability to do continous refactoring is a must have. Missed oppurtunities for refactoring build more and more technical debt leading to complex code base which is difficult to understand and extend. 
